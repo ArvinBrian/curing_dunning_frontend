@@ -1,0 +1,112 @@
+/* src/components/PaymentHistory.css */
+
+.payment-history-container {
+    padding: 40px;
+    max-width: 900px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Header and Back Button */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.history-header h1 {
+    color: #004d99; /* Deep blue for primary headings */
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s ease-in-out;
+}
+
+.back-btn:hover {
+    color: #004d99;
+}
+
+/* Bill List Styling */
+.past-bill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.past-bill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 25px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-left: 5px solid #4CAF50; /* Green stripe to signify 'PAID' */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.past-bill-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background-color: #f5f5f5;
+}
+
+/* Item Details */
+.item-details h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.item-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #777;
+}
+
+/* Payment Info (Amount and Date) */
+.item-payment-info {
+    text-align: right;
+}
+
+.paid-amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #4CAF50; /* Success green */
+    margin-bottom: 3px;
+}
+
+.paid-date {
+    font-size: 13px;
+    color: #888;
+}
+
+/* No Records Message */
+.history-content > p {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    padding: 30px;
+    background-color: #fff3cd; /* Light warning color */
+    border: 1px solid #ffe0a3;
+    border-radius: 8px;
+}
