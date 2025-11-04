@@ -117,3 +117,8 @@
     background-color: #c62828;
     color: white;
 }
+
+.navbar-actions {
+    display: flex;
+    gap: 1rem;
+}
