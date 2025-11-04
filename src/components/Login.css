@@ -225,28 +225,58 @@ body {
     margin-bottom: 3rem;
 }
 
-/* --- Simple Animation --- */
+/* -------------------- */
+/* 1. Define the Animation (No Change Needed Here) */
+/* -------------------- */
+@keyframes floatAndPulse {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.1;
+    }
+    50% {
+        transform: translate(-10px, -10px) scale(1.1); 
+        opacity: 0.3;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.1;
+    }
+}
+
+/* -------------------- */
+/* 2. Simple Animation Containers and Circles */
+/* -------------------- */
+
 .animation-container {
     position: relative;
-    width: 250px;
-    height: 250px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
 .circle {
     position: absolute;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); 
+    
+    /* --- Main Animation Speed Increased --- */
+    animation-name: floatAndPulse;
+    animation-duration: 10s; /* Reduced from 15s */
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    backface-visibility: hidden;
 }
+
+/* -------------------- */
+/* 3. Individual Circle Placement and Animation Delay */
+/* -------------------- */
 
 .c1 {
     width: 300px;
     height: 300px;
     top: -50px;
     right: -50px;
+    animation-delay: 0s; 
+    animation-duration: 9s; /* Reduced from 18s */
 }
 
 .c2 {
@@ -254,6 +284,8 @@ body {
     height: 200px;
     bottom: 50px;
     left: 50px;
+    animation-delay: -3s; 
+    animation-duration: 8s; /* Reduced from 14s */
 }
 
 .c3 {
@@ -261,6 +293,8 @@ body {
     height: 100px;
     bottom: 50px;
     right: 150px;
+    animation-delay: -6s; 
+    animation-duration: 10s; /* Reduced from 20s */
 }
 
 /* --- Responsive --- */

@@ -22,91 +22,56 @@ axiosInstance.interceptors.request.use(config => {
 // --- Admin API Service ---
 const adminService = {
     login: async (email, password) => {
-        // Login doesn't use the interceptor for tokens
-        const response = await axios.post(`${API_URL}/login`, { email, password });
-        if (response.data.token) {
-            localStorage.setItem('admin_token_cc', response.data.token);
+        try {
+            const response = await axios.post(`${API_URL}/login`, { email, password });
+
+            if (response.data.token) {
+                localStorage.setItem('admin_token_cc', response.data.token); // Store the token
+                return { token: response.data.token }; // Return the token (to be used in the frontend)
+            } else {
+                throw new Error('No token received');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
         }
-        return response.data;
+    },
+
+    getAllCustomers: async () => {
+        const response = await axiosInstance.get('/customers/all');
+        if (Array.isArray(response.data)) {
+            return response.data;
+        }
+        return [];
     },
 
     getDashboard: () => axiosInstance.get('/dashboard').then(res => res.data),
-
-    // --- CUSTOMER MANAGEMENT ---
-    
-    // 🛑 REMOVED: getAllCustomers()
-    
     // ✅ NEW: getFilteredCustomers
-    // This function now calls your new backend endpoint
     getFilteredCustomers: async (customerId, phoneNumber) => {
         try {
-            // build plain params object (axios will serialize)
             const paramsObj = {};
-            if (customerId !== undefined && customerId !== null && customerId !== '') paramsObj.customerId = customerId;
-            if (phoneNumber !== undefined && phoneNumber !== null && phoneNumber !== '') paramsObj.phoneNumber = phoneNumber;
+
+            // 1. Handle customerId
+            if (customerId && String(customerId).trim() !== '') {
+                paramsObj.customerId = customerId.trim();
+            }
+
+            // 2. Handle phoneNumber
+            if (phoneNumber && phoneNumber.trim() !== '') {
+                paramsObj.phoneNumber = phoneNumber.trim();
+            }
 
             const response = await axiosInstance.get('/customers', { params: paramsObj });
-            console.log('Raw customers API response:', response); // full response for debugging
 
-            let data = response.data;
-
-            // Helper: extract first balanced JSON array from a string
-            function extractFirstJsonArray(str) {
-                if (typeof str !== 'string') return null;
-                const start = str.indexOf('[');
-                if (start === -1) return null;
-                let depth = 0;
-                for (let i = start; i < str.length; i++) {
-                    if (str[i] === '[') depth++;
-                    else if (str[i] === ']') {
-                        depth--;
-                        if (depth === 0) {
-                            return str.slice(start, i + 1);
-                        }
-                    }
-                }
-                return null;
+            if (Array.isArray(response.data)) {
+                return response.data;
             }
 
-            // If backend returned a JSON string, try to parse it
-            if (typeof data === 'string') {
-                try {
-                    data = JSON.parse(data);
-                    console.log('Parsed customers JSON string ->', data);
-                } catch (parseErr) {
-                    console.warn('Failed to JSON.parse customers response string:', parseErr);
-                    // Try to extract a balanced array substring and parse that
-                    const arrText = extractFirstJsonArray(response.data);
-                    if (arrText) {
-                        try {
-                            data = JSON.parse(arrText);
-                            console.log('Recovered JSON array from response string (balanced parser)');
-                        } catch (recoverErr) {
-                            console.error('Could not parse recovered JSON array:', recoverErr);
-                            data = null;
-                        }
-                    } else {
-                        data = null;
-                    }
-                }
-            }
-
-            // Normalize common wrapper shapes
-            if (Array.isArray(data)) return data;
-            if (data == null) return [];
-            if (Array.isArray(data.content)) return data.content;
-            if (Array.isArray(data.data)) return data.data;
-            if (Array.isArray(data.customers)) return data.customers;
-
-            // Try to discover an array property
-            for (const key of Object.keys(data)) {
-                if (Array.isArray(data[key])) return data[key];
-            }
-
-            // Fallback: return empty list
             return [];
+
         } catch (error) {
-            console.error('Error fetching customers:', error);
+            console.error('Error fetching filtered customers:', error);
+            // This is likely where your 401/403 errors are being caught if your AdminRoute/Interceptor isn't working perfectly.
             throw error;
         }
     },
@@ -130,7 +95,7 @@ const adminService = {
     updateSubscription: async (subscriptionId, updates) => {
         const token = localStorage.getItem('admin_token_cc');
         const response = await axios.put(
-            `${API_URL}/subscriptions/${subscriptionId}`, 
+            `${API_URL}/subscriptions/${subscriptionId}`,
             updates,
             {
                 headers: { Authorization: `Bearer ${token}` }

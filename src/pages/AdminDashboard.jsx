@@ -1,42 +1,75 @@
+// File: src/pages/AdminDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import adminService from '../services/adminService';
+import useDebounce from '../hooks/useDebounce'; // <-- IMPORT THE HOOK
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
     const [dashboard, setDashboard] = useState(null);
     const [customers, setCustomers] = useState([]);
-    const [rawCustomersResponse, setRawCustomersResponse] = useState(null); // debug
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    // State for immediate user input
+    const [customerIdFilter, setCustomerIdFilter] = useState(''); 
+    const [phoneNumberFilter, setPhoneNumberFilter] = useState('');
+
+    // --- Apply the Debounce Hook ---
+    const debouncedCustomerId = useDebounce(customerIdFilter, 500); // 500ms delay
+    const debouncedPhoneNumber = useDebounce(phoneNumberFilter, 500); // 500ms delay
+
+
+    // --- EFFECT 1: Fetch Dashboard Stats (Runs Once) ---
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDashboardStats = async () => {
+            setLoading(true);
             try {
-                const [dashData, customersData] = await Promise.all([
-                    adminService.getDashboard(),
-                    adminService.getFilteredCustomers()
-                ]);
-
-                console.log('Dashboard response:', dashData);
-                console.log('Customers API returned (processed):', customersData);
-
-                setRawCustomersResponse(customersData); // keep raw for debugging UI
-
+                const dashData = await adminService.getDashboard();
                 setDashboard(dashData);
+            } catch (err) {
+                console.error('Failed to load dashboard stats:', err);
+                setError('Failed to load dashboard statistics.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchDashboardStats();
+    }, []); // Empty dependency array ensures this runs only once
+
+
+    // --- EFFECT 2: Fetch Customers based on filters (debounced) ---
+    // This single effect handles both the initial load (filters are empty)
+    // and subsequent searches.
+    useEffect(() => {
+        const fetchFilteredData = async () => {
+            setLoading(true); // Indicate that a new search is happening
+            setError('');
+            try {
+                // This now correctly calls the /customers endpoint.
+                // If filters are empty, it fetches all customers.
+                // If filters have values, it fetches filtered results.
+                const customersData = await adminService.getFilteredCustomers(
+                    debouncedCustomerId, 
+                    debouncedPhoneNumber
+                );
                 setCustomers(Array.isArray(customersData) ? customersData : []);
             } catch (err) {
-                console.error('Error:', err);
-                setError('Failed to load data');
+                console.error('Filter search error:', err);
+                setError('Failed to fetch customer data.');
+                setCustomers([]); // Clear customers on error
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchData();
-    }, []);
+        fetchFilteredData();
+        
+    }, [debouncedCustomerId, debouncedPhoneNumber]); 
+    // ^ This effect re-runs whenever the debounced filter values change.
 
-    if (loading) return <div>Loading...</div>;
+
+    if (loading && !dashboard) return <div>Loading Admin Portal...</div>;
 
     return (
         <div className="admin-dashboard p-6">
@@ -47,6 +80,25 @@ const AdminDashboard = () => {
             <header className="admin-header mb-6">
                 <h1 className="text-3xl font-bold">Admin Dashboard</h1>
                 {error && <div className="text-red-500 bg-red-100 p-3 rounded-lg">{error}</div>}
+
+                {/* Filter inputs for Customer ID and Phone */}
+                <div className="admin-filter-container mt-4">
+                    <input
+                        type="text"
+                        placeholder="Customer ID"
+                        value={customerIdFilter}
+                        onChange={(e) => setCustomerIdFilter(e.target.value)}
+                        className="admin-filter-input"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Phone Number"
+                        value={phoneNumberFilter}
+                        onChange={(e) => setPhoneNumberFilter(e.target.value)}
+                        className="admin-filter-input"
+                    />
+                </div>
+
                 <div className="admin-stats-grid grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
                     <div className="stat-card bg-white p-4 rounded-lg shadow">
                         <h3 className="text-gray-500">Total Customers</h3>
@@ -70,7 +122,6 @@ const AdminDashboard = () => {
                         </thead>
                         <tbody>
                             {customers.length > 0 ? customers.map((customer, idx) => {
-                                // support multiple possible key names returned by backend
                                 const id = customer.customerId ?? customer.customer_id ?? customer.id ?? customer.customerId;
                                 const phone = customer.phone ?? customer.phoneNumber ?? customer.mobile ?? '';
                                 const name = customer.name ?? customer.fullName ?? '';
@@ -93,14 +144,9 @@ const AdminDashboard = () => {
                                 );
                             }) : (
                                 <tr>
-                                    <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
-                                        No customers to display.
-                                        {/* temporary debug dump */}
-                                        {rawCustomersResponse && (
-                                            <pre style={{textAlign:'left', marginTop:12, maxHeight:200, overflow:'auto'}}>
-{JSON.stringify(rawCustomersResponse, null, 2)}
-                                            </pre>
-                                        )}
+                                    <td colSpan="6" className="px-6 py-8 text-center text-gray-500 font-semibold">
+                                        {loading ? 'Searching...' : 
+                                        'No customers found. (Check console for API errors if this persists.)'}
                                     </td>
                                 </tr>
                             )}
