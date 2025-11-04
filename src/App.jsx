@@ -13,6 +13,8 @@ import AdminLogin from './pages/AdminLogin.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import CustomerDetails from './pages/CustomerDetails.jsx';
 import AddCustomer from './pages/AddCustomer.jsx'; // Import the new page
+import ManageRules from './pages/ManageRules.jsx';
+import AllEvents from './pages/AllEvents.jsx';
 
 
 // --- Private Route Helper ---
@@ -77,6 +79,24 @@ const App = () => {
                     element={
                         <AdminRoute>
                             <AddCustomer />
+                        </AdminRoute>
+                    }
+                />
+                {/* Add the new route for the Manage Rules page */}
+                <Route 
+                    path="/admin/rules"
+                    element={
+                        <AdminRoute>
+                            <ManageRules />
+                        </AdminRoute>
+                    }
+                />
+                {/* This is the missing route for the "View All Events" page */}
+                <Route 
+                    path="/admin/events"
+                    element={
+                        <AdminRoute>
+                            <AllEvents />
                         </AdminRoute>
                     }
                 />

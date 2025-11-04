@@ -28,14 +28,6 @@
     padding: 1.5rem 2rem;
 }
 
-.admin-filters {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    background: white;
-    border-bottom: 1px solid #e0e0e0;
-}
-
 .admin-filter-input {
     padding: 0.5rem;
     border: 1px solid #e0e0e0;

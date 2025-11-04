@@ -75,6 +75,9 @@ const AdminDashboard = () => {
                     <Link to="/admin/customers/add" className="bg-blue-600 text-white hover:bg-blue-700 font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300">
                         Add Customer
                     </Link>
+                    <Link to="/admin/events" className="bg-purple-600 text-white hover:bg-purple-700 font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300">
+                        View All Events
+                    </Link>
                     <Link to="/admin/rules" className="bg-gray-700 text-white hover:bg-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300">
                         Manage Rules
                     </Link>
@@ -103,11 +106,7 @@ const AdminDashboard = () => {
                     />
                 </div>
 
-                <div className="admin-stats-grid grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-                    <div className="stat-card bg-white p-4 rounded-lg shadow">
-                        <p className="text-2xl font-bold">{dashboard?.totalCustomers || 0}</p>
-                    </div>
-                </div>
+                {/* The customer count stat card has been removed as requested. */}
             </header>
 
             <div className="admin-content">

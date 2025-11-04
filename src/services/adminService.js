@@ -103,6 +103,12 @@ const adminService = {
     updateRule: (id, ruleData) => axiosInstance.put(`/rules/${id}`, ruleData).then(res => res.data),
     deleteRule: (id) => axiosInstance.delete(`/rules/${id}`),
 
+    // --- Dunning Events Management ---
+    getAllEvents: (filters) => {
+        // filters is an object like { status: 'PENDING', planType: 'POSTPAID', serviceName: 'Broadband' }
+        return axiosInstance.get('/events', { params: filters }).then(res => res.data);
+    },
+
     // Subscription Management
     updateSubscription: async (subscriptionId, updates) => {
         const token = localStorage.getItem('admin_token_cc');
