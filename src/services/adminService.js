@@ -94,6 +94,8 @@ const adminService = {
         return response.data;
     },
 
+    // Add this new method for creating a customer
+    createCustomer: (customerData) => axiosInstance.post('/customers', customerData).then(res => res.data),
 
     // --- Dunning Rules Management ---
     getAllRules: () => axiosInstance.get('/rules').then(res => res.data),

@@ -12,6 +12,7 @@ import CustomerSupport from './components/CustomerSupport.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import CustomerDetails from './pages/CustomerDetails.jsx';
+import AddCustomer from './pages/AddCustomer.jsx'; // Import the new page
 
 
 // --- Private Route Helper ---
@@ -69,6 +70,15 @@ const App = () => {
                             <CustomerDetails />
                         </AdminRoute>
                     } 
+                />
+                {/* Add the new route for the Add Customer page */}
+                <Route 
+                    path="/admin/customers/add"
+                    element={
+                        <AdminRoute>
+                            <AddCustomer />
+                        </AdminRoute>
+                    }
                 />
                 {/* Fallback */}
                 <Route path="*" element={<h1 className="text-center p-10 text-xl font-bold">404 - Not Found</h1>} />
