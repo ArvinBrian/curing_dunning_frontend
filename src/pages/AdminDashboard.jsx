@@ -7,7 +7,8 @@ import './AdminDashboard.css';
 
 const AdminDashboard = () => {
     const [dashboard, setDashboard] = useState(null);
-    const [customers, setCustomers] = useState([]);
+    const [allCustomers, setAllCustomers] = useState([]); // Holds the master list of all customers
+    const [filteredCustomers, setFilteredCustomers] = useState([]); // Holds the list to be displayed
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -15,58 +16,53 @@ const AdminDashboard = () => {
     const [customerIdFilter, setCustomerIdFilter] = useState(''); 
     const [phoneNumberFilter, setPhoneNumberFilter] = useState('');
 
-    // --- Apply the Debounce Hook ---
-    const debouncedCustomerId = useDebounce(customerIdFilter, 500); // 500ms delay
-    const debouncedPhoneNumber = useDebounce(phoneNumberFilter, 500); // 500ms delay
-
-
-    // --- EFFECT 1: Fetch Dashboard Stats (Runs Once) ---
+    // --- EFFECT 1: Initial Data Fetch (Runs Once) ---
+    // Fetches dashboard stats AND the complete list of all customers.
     useEffect(() => {
-        const fetchDashboardStats = async () => {
+        const fetchInitialData = async () => {
             setLoading(true);
             try {
-                const dashData = await adminService.getDashboard();
+                // Use Promise.all to fetch both sets of data concurrently
+                const [dashData, customersData] = await Promise.all([
+                    adminService.getDashboard(),
+                    adminService.getFilteredCustomers('', '') // Fetch ALL customers
+                ]);
+
                 setDashboard(dashData);
+
+                const customers = Array.isArray(customersData) ? customersData : [];
+                setAllCustomers(customers); // Store the master list
+                setFilteredCustomers(customers); // Initially, the filtered list is the same as the master list
+
             } catch (err) {
-                console.error('Failed to load dashboard stats:', err);
-                setError('Failed to load dashboard statistics.');
+                console.error('Failed to load initial data:', err);
+                setError('Failed to load initial dashboard data.');
             } finally {
                 setLoading(false);
             }
         };
-        fetchDashboardStats();
+        fetchInitialData();
     }, []); // Empty dependency array ensures this runs only once
 
 
-    // --- EFFECT 2: Fetch Customers based on filters (debounced) ---
-    // This single effect handles both the initial load (filters are empty)
-    // and subsequent searches.
+    // --- EFFECT 2: Client-Side Filtering ---
+    // This effect runs whenever the user types into the filter inputs.
+    // It filters the `allCustomers` list without making new API calls.
     useEffect(() => {
-        const fetchFilteredData = async () => {
-            setLoading(true); // Indicate that a new search is happening
-            setError('');
-            try {
-                // This now correctly calls the /customers endpoint.
-                // If filters are empty, it fetches all customers.
-                // If filters have values, it fetches filtered results.
-                const customersData = await adminService.getFilteredCustomers(
-                    debouncedCustomerId, 
-                    debouncedPhoneNumber
-                );
-                setCustomers(Array.isArray(customersData) ? customersData : []);
-            } catch (err) {
-                console.error('Filter search error:', err);
-                setError('Failed to fetch customer data.');
-                setCustomers([]); // Clear customers on error
-            } finally {
-                setLoading(false);
-            }
-        };
+        let result = allCustomers;
 
-        fetchFilteredData();
-        
-    }, [debouncedCustomerId, debouncedPhoneNumber]); 
-    // ^ This effect re-runs whenever the debounced filter values change.
+        if (customerIdFilter) {
+            result = result.filter(c => String(c.customerId ?? c.id ?? '').includes(customerIdFilter));
+        }
+
+        if (phoneNumberFilter) {
+            result = result.filter(c => String(c.phone ?? c.phoneNumber ?? '').includes(phoneNumberFilter));
+        }
+
+        setFilteredCustomers(result);
+
+    }, [customerIdFilter, phoneNumberFilter, allCustomers]); 
+    // ^ This effect re-runs when filter inputs change or when the master list is updated.
 
 
     if (loading && !dashboard) return <div>Loading Admin Portal...</div>;
@@ -121,7 +117,7 @@ const AdminDashboard = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {customers.length > 0 ? customers.map((customer, idx) => {
+                            {filteredCustomers.length > 0 ? filteredCustomers.map((customer, idx) => {
                                 const id = customer.customerId ?? customer.customer_id ?? customer.id ?? customer.customerId;
                                 const phone = customer.phone ?? customer.phoneNumber ?? customer.mobile ?? '';
                                 const name = customer.name ?? customer.fullName ?? '';

@@ -63,11 +63,21 @@ const adminService = {
 
             const response = await axiosInstance.get('/customers', { params: paramsObj });
 
-            if (Array.isArray(response.data)) {
-                return response.data;
-            }
+            const data = response.data;
 
-            return [];
+            // **THE FIX IS HERE:**
+            // This makes the service robust. It checks if the response is an array directly.
+            // If not, it looks for a `content` or `customers` property, which is common
+            // in paginated or structured backend responses.
+            if (Array.isArray(data)) {
+                return data;
+            }
+            if (data && Array.isArray(data.content)) {
+                return data.content;
+            }
+            if (data && Array.isArray(data.customers)) {
+                return data.customers;
+            }
 
         } catch (error) {
             console.error('Error fetching filtered customers:', error);
