@@ -20,13 +20,13 @@ const AdminLogin = () => {
         try {
             // adminService.login already sets the token in localStorage
             // and returns an object like { token: "..." }
-            const response = await adminService.login(email, password); 
+            const response = await adminService.login(email, password);
 
             // **THE FIX IS HERE:**
             // We check for 'response.token', NOT 'response.data.token'
             if (response && response.token) {
-                console.log("Login successful, token received:", response.token); 
-                
+                console.log("Login successful, token received:", response.token);
+
                 // The service already set the token, so we just navigate
                 navigate('/admin/dashboard');
             } else {
@@ -49,6 +49,9 @@ const AdminLogin = () => {
 
     return (
         <div className="admin-container">
+            <header className="admin-header">
+                <h1 className="admin-header__title">CONNECTCOM</h1>
+            </header>
             <div className="admin-form-container">
                 <h2 className="admin-title">
                     Admin Portal

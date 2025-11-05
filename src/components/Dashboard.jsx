@@ -2,9 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaHome, FaCreditCard, FaHeadset, FaSignOutAlt, FaHistory } from 'react-icons/fa';
 import authService from '../services/authService';
-// Assuming you have dashboardService and billService imported
-import dashboardService from '../services/dashboardService'; 
-import billService from '../services/billService'; 
+import dashboardService from '../services/dashboardService';
+import billService from '../services/billService';
 import './Dashboard.css';
 
 // --- Custom Hook for Data Fetching ---
@@ -55,50 +54,74 @@ const useDashboardData = (navigate) => {
     return { customerData, /*pastBills,*/ isLoading, error, user };
 };
 
-// --- Helper Component for Service Card ---
+/* --- Helper: Service Card (Pure presentational) --- */
 const ServiceCard = ({ service }) => {
     const statusClass = service.currentStatus ? service.currentStatus.toLowerCase() : 'unknown';
     return (
         <div className="service-card">
-            <h3>{service.serviceName}</h3>
-            <p>Status: <span className={`status-box ${statusClass}`}>{service.currentStatus || 'N/A'}</span></p>
-            <p>{service.statusText}</p>
+            <div className="service-card__head">
+                <h3 className="service-card__title">{service.serviceName}</h3>
+                <span className={`service-card__status status-box ${statusClass}`}>
+                    {service.currentStatus || 'N/A'}
+                </span>
+            </div>
+            {service.statusText && <p className="service-card__desc">{service.statusText}</p>}
             {service.pendingAction && (
-                <p className="pending-action">Action Needed: {service.pendingAction.replace(/_/g, ' ')}</p>
+                <p className="service-card__action">Action Needed: {service.pendingAction.replace(/_/g, ' ')}</p>
             )}
         </div>
     );
 };
 
-// --- Helper Component for Dunning Event List ---
+
+/* --- Helper: Dunning Event List (Pure presentational) --- */
 const DunningEventList = ({ events }) => {
-    const filteredEvents = events
+    const filteredEvents = (events || [])
         .filter(event => event.status === 'PENDING' || event.status === 'RESOLVED')
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     if (filteredEvents.length === 0) {
-        return <p>No recent dunning events found.</p>;
+        return <p className="dunning-list__empty">No recent dunning events found.</p>;
     }
 
     return (
-        <div className="dunning-event-list">
+        <div className="dunning-list">
             {filteredEvents.map((event) => (
-                <div key={event.id} className={`dunning-event-item ${event.status.toLowerCase()}`}>
-                    <p><strong>Service:</strong> {event.serviceName}</p>
-                    <p><strong>Status:</strong> <span className={`status-box ${event.status.toLowerCase()}`}>{event.status}</span></p>
-                    <p><strong>Days Overdue:</strong> {event.daysOverdue}</p>
-                    <p><strong>Triggered:</strong> {new Date(event.createdAt).toLocaleDateString()}</p>
-                    
+                <div key={event.id} className={`dunning-item dunning-item--${event.status.toLowerCase()}`}>
+                    <div className="dunning-item__grid">
+                        <div>
+                            <p className="dunning-item__label"><strong>Service</strong></p>
+                            <p className="dunning-item__value">{event.serviceName}</p>
+                        </div>
+
+                        <div>
+                            <p className="dunning-item__label"><strong>Status</strong></p>
+                            <p className="dunning-item__value">
+                                <span className={`status-box ${event.status.toLowerCase()}`}>{event.status}</span>
+                            </p>
+                        </div>
+
+                        <div>
+                            <p className="dunning-item__label"><strong>Days Overdue</strong></p>
+                            <p className="dunning-item__value">{event.daysOverdue}</p>
+                        </div>
+
+                        <div>
+                            <p className="dunning-item__label"><strong>Triggered</strong></p>
+                            <p className="dunning-item__value">{new Date(event.createdAt).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+
                     {event.status === 'PENDING' && event.pendingAction && (
-                        <p className="event-action">Recommended Action: {event.pendingAction.replace(/_/g, ' ')}</p>
+                        <p className="dunning-item__action">Recommended Action: {event.pendingAction.replace(/_/g, ' ')}</p>
                     )}
-                    {/* 💡 FIX HERE: Only display if status is RESOLVED AND resolvedAt is not null */}
+
                     {event.status === 'RESOLVED' && event.resolvedAt && (
-                        <p className="event-resolved-at">Resolved: {new Date(event.resolvedAt).toLocaleDateString()}</p>
+                        <p className="dunning-item__resolved">Resolved: {new Date(event.resolvedAt).toLocaleDateString()}</p>
                     )}
-                    {/* Add an else condition for PENDING events that need resolution info */}
-                    {event.status === 'PENDING' && (
-                        <p className="event-resolved-at">Resolution Required</p>
+
+                    {event.status === 'PENDING' && !event.resolvedAt && (
+                        <p className="dunning-item__resolved">Resolution Required</p>
                     )}
                 </div>
             ))}
@@ -107,24 +130,23 @@ const DunningEventList = ({ events }) => {
 };
 
 
+/* --- Main Dashboard Component --- */
 const Dashboard = () => {
     const navigate = useNavigate();
-    const { customerData, pastBills, isLoading, error, user } = useDashboardData(navigate);
-    
-    // Check if user is null before accessing properties to prevent crash on slow load/redirect
+    const { customerData, isLoading, error, user } = useDashboardData(navigate);
+
     const welcomeName = user && user.email ? user.email.split('@')[0] : 'Customer';
 
     const handleLogout = () => {
-        authService.logout(); 
-        navigate('/login'); 
+        authService.logout();
+        navigate('/login');
     };
 
-    // --- Loading and Error States ---
     if (isLoading) {
         return (
             <div className="dashboard-container">
-                <div className="loading-spinner"></div>
-                <p>Loading dashboard...</p>
+                <div className="loading-spinner" aria-hidden="true"></div>
+                <p className="dashboard-container__loading-text">Loading dashboard...</p>
             </div>
         );
     }
@@ -138,61 +160,58 @@ const Dashboard = () => {
         );
     }
 
-    // --- Main Render ---
     return (
         <div className="dashboard-layout">
             {/* Navbar */}
             <nav className="navbar">
-                <div className="navbar-logo">CONNECOM</div>
-                <ul className="navbar-links">
-                    <li><button onClick={() => navigate('/dashboard')} className="nav-btn"><FaHome /> Home</button></li>
-                    <li><button onClick={() => navigate('/pay-bills')} className="nav-btn"><FaCreditCard /> Pay Bills</button></li>
-                    <li><button onClick={() => navigate('/payment-history')} className="nav-btn"><FaHistory /> Payment History</button></li>
-                    <li><button onClick={() => navigate('/support')} className="nav-btn"><FaHeadset /> Support</button></li>
-                    <li><button onClick={handleLogout} className="nav-btn logout-btn"><FaSignOutAlt /> Log Out</button></li>
+                <div className="navbar__brand">CONNECTCOM</div>
+                <ul className="navbar__links">
+                    <li><button onClick={() => navigate('/dashboard')} className="navbar__btn"><FaHome /> <span>Home</span></button></li>
+                    <li><button onClick={() => navigate('/pay-bills')} className="navbar__btn"><FaCreditCard /> <span>Pay Bills</span></button></li>
+                    <li><button onClick={() => navigate('/payment-history')} className="navbar__btn"><FaHistory /> <span>Payment History</span></button></li>
+                    <li><button onClick={() => navigate('/support')} className="navbar__btn"><FaHeadset /> <span>Support</span></button></li>
+                    <li><button onClick={handleLogout} className="navbar__btn navbar__btn--logout"><FaSignOutAlt /> <span>Log Out</span></button></li>
                 </ul>
             </nav>
 
-            <div className="dashboard-content-wrapper">
-                <div className="dashboard-header">
-                    <h1>Welcome, {welcomeName}!</h1> 
-                    <p>Here's an overview of your services and billing history.</p>
+            <main className="dashboard-content-wrapper">
+                <header className="dashboard-header">
+                    <h1 className="dashboard-header__title">Welcome, {welcomeName}!</h1>
+                    <p className="dashboard-header__subtitle">Here's an overview of your services and billing events.</p>
+                </header>
+
+                {/* Two-column main sections: Services (left) / Dunning (right) */}
+                <div className="dashboard-main-sections">
+                    <section className="services-section card">
+                        <div className="card__header">
+                            <h2 className="card__title">Your Services</h2>
+                        </div>
+
+                        <div className="service-cards-container">
+                            {customerData.services && customerData.services.length > 0 ? (
+                                customerData.services.map((service, index) => (
+                                    <ServiceCard key={index} service={service} />
+                                ))
+                            ) : (
+                                <p className="muted-text">No active services found.</p>
+                            )}
+                        </div>
+                    </section>
+
+                    <section className="dunning-events-section card">
+                        <div className="card__header">
+                            <h2 className="card__title">Dunning Events</h2>
+                        </div>
+
+                        <DunningEventList events={customerData.events || []} />
+                    </section>
                 </div>
 
-                {/* Service Cards Section */}
-                <section className="services-section">
-                    <h2>Your Services</h2>
-                    <div className="service-cards-container">
-                        {customerData.services && customerData.services.length > 0 ? (
-                            customerData.services.map((service, index) => (
-                                <ServiceCard key={index} service={service} />
-                            ))
-                        ) : (
-                            <p>No active services found.</p>
-                        )}
-                    </div>
-                </section>
-
-                <hr />
-
-                {/* Dunning Events Section (RESTORED) */}
-                <section className="dunning-events-section">
-                    <h2>⚠️ Your Dunning Events</h2>
-                    
-                    {/* Call the helper component, passing the events array from customerData */}
-                    <DunningEventList events={customerData.events || []} /> 
-                    
-                </section>
-
-                {/* Billing History Section (Combined Dunning Events and Past Bills) */}
-                
-
-                {/* Footer */}
                 <footer className="dashboard-footer">
-                    <span>Copyright © 2025 CONNECOM LTD.</span>
-                    <span>Privacy Policy</span>
+                    <span>Copyright © 2025 CONNECTCOM LTD.</span>
+                    <span className="dashboard-footer__policy">Privacy Policy</span>
                 </footer>
-            </div>
+            </main>
         </div>
     );
 };

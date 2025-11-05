@@ -1,116 +1,188 @@
+/* Admin Dashboard Styles - CONNECTCOM */
+/* ----------------------------------- */
+
 .admin-dashboard {
     min-height: 100vh;
-    background-color: #f5f5f5;
+    background-color: #f8fafc;
+    font-family: 'Inter', sans-serif;
 }
 
-.admin-navbar {
-    background: white;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+/* ---------------- Navbar ---------------- */
+.navbar {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #0f1724; /* near-black navy */
+    color: #fff;
+    box-shadow: 0 2px 8px var(--shadow-strong);
 }
 
-.admin-logo {
+.navbar__brand {
     font-size: 1.5rem;
-    font-weight: 800;
-    color: #000;
-    text-decoration: none;
+    font-weight: 700;
+    color: #4b2ccf; /* Deep purple to match CONNECTCOM theme */
+    letter-spacing: 0.5px;
 }
 
+.navbar__links {
+    display: flex;
+    gap: 1.25rem;
+    list-style: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.4rem 1rem;
+    border-radius: 0.5rem;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.navbar__btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Optional: For logout button customization */
+.navbar__btn--logout {
+    color: #fca5a5;
+}
+
+.navbar__btn--logout:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+
+/* ===== Dashboard Header ===== */
 .admin-header {
-    background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
-    color: white;
-    padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #000000, #090420); /* Deep Purple Gradient */
+  padding: 1rem 2rem;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+    /* background: linear-gradient(90deg, #2e1a94, #4b2ccf); Deep Purple Gradient */
+    /* color: linear-gradient(90deg, #2e1a94, #4b2ccf);; */
+  color: #2e1a94;
+    letter-spacing: 0.05rem;
+  color: #ffffff; /* Dark Blue Text */
+}
+
+.admin-header__right {
+  display: flex;
+  gap: 1rem;
+}
+
+.admin-header__btn {
+  background-color: #4b2ccf; /* Deep Purple */
+  color: #fff;
+  border: none;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.admin-header__btn:hover {
+  background-color: #351f99;
+  transform: translateY(-2px);
+}
+
+.admin-header__btn:active {
+  transform: translateY(0);
+}
+
+
+
+/* ===== FILTER ===== */
+.admin-filter-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
 .admin-filter-input {
-    padding: 0.5rem;
+    padding: 0.6rem;
     border: 1px solid #e0e0e0;
-    border-radius: 0.25rem;
-    min-width: 200px;
+    border-radius: 0.375rem;
+    min-width: 220px;
+    transition: all 0.2s ease;
 }
 
+.admin-filter-input:focus {
+    border-color: #1a237e;
+    box-shadow: 0 0 0 2px rgba(26, 35, 126, 0.15);
+    outline: none;
+}
+
+/* ===== CONTENT ===== */
 .admin-content {
     padding: 2rem;
 }
 
-.admin-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem;
-}
-
-.admin-stat-card {
-    background: white;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    border-left: 4px solid #ff5722;
-}
-
-.admin-stat-title {
-    color: #1a237e;
-    font-size: 0.875rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.admin-stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #283593;
-}
-
+/* ===== TABLE ===== */
 .admin-table-container {
-    background: white;
+    background: #ffffff;
     border-radius: 0.5rem;
-    margin: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .admin-table {
     width: 100%;
     border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
 }
 
 .admin-table th {
     background-color: #1a237e;
     color: white;
     padding: 1rem;
-    text-align: left;
+    font-weight: 600;
 }
 
 .admin-table td {
     padding: 1rem;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.admin-action-button {
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
+.admin-table tr:hover {
+    background-color: #f9fafb;
+}
+
+.admin-link {
+    color: #1e40af;
     font-weight: 500;
-    transition: background-color 0.2s;
+    text-decoration: none;
 }
 
-.admin-edit-button {
-    background-color: #1a237e;
-    color: white;
-    margin-right: 0.5rem;
+.admin-link:hover {
+    color: #1a237e;
+    text-decoration: none;
 }
 
-.admin-delete-button {
-    background-color: #c62828;
-    color: white;
-}
-
-.navbar-actions {
-    display: flex;
-    gap: 1rem;
+.admin-empty {
+    padding: 2rem;
+    text-align: center;
+    color: #6b7280;
+    font-weight: 500;
 }

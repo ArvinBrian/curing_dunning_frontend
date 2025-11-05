@@ -1,9 +1,7 @@
-// src/components/Login.js (COMPLETE FILE)
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
-import './Login.css'; // Make sure this CSS file exists
+import './Login.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -11,34 +9,30 @@ const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    // --- THIS IS THE NEW, CORRECTED LOGIC ---
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // Clear previous errors
+        setError('');
         try {
-            // authService.login now handles localStorage automatically
             await authService.login(email, password);
-
-            // If it succeeds, navigate.
             navigate('/dashboard');
-
         } catch (err) {
             console.error('Login component error:', err);
-            setError('Invalid email or password'); // Show user-friendly error
+            setError('Invalid email or password');
         }
     };
-    // --- END OF NEW LOGIC ---
 
-    // --- THIS IS YOUR ORIGINAL JSX, NOW RESTORED ---
     return (
         <div className="login-container">
             <div className="left-panel">
                 <div className="login-wrapper">
-                    <div className="logo">CONNECTCOM</div>
+                    <div className="logo">ConnectCom</div>
+
                     <div className="login-form">
                         <h1>Welcome Back</h1>
                         <p>Please enter your details to sign in</p>
+
                         {error && <div className="error-message">{error}</div>}
+
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Email</label>
@@ -50,27 +44,38 @@ const Login = () => {
                                     required
                                 />
                             </div>
+
                             <div className="form-group">
-                                .                     <label>Password</label>
+                                <label>Password</label>
                                 <input
                                     type="password"
                                     className="form-input"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    s required
+                                    required
                                 />
                             </div>
-                            s           <button type="submit" className="login-btn">
+
+                            <button type="submit" className="login-btn">
                                 Sign In
                             </button>
                         </form>
+
+                        <div className="login-footer">
+                            <p>Copyright © 2025 CONNECTCOM LTD.</p>
+                            <a href="#">Privacy Policy</a>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div className="right-panel">
                 <div className="content">
-                    <h2>Welcome to CONNECTCOM</h2>
-                    <p>Your trusted telecommunications partner</p>
+                    <h2 className="hero-title">
+                        Bridging the gap between <span className="highlight">Connection</span> and <span className="highlight">Communication</span>
+                    </h2>
+                    <p className="hero-subtext">All your services. At one place</p>
+
                     <div className="animation-container">
                         <div className="circle c1"></div>
                         <div className="circle c2"></div>

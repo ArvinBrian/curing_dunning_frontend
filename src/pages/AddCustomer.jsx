@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import adminService from '../services/adminService';
-import './AdminDashboard.css'; // Re-use styles for consistency
+import './AddCustomer.css'; // Re-use styles for consistency
 
 const AddCustomer = () => {
     const navigate = useNavigate();

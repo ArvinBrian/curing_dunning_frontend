@@ -1,0 +1,130 @@
+/* ==========================
+   AddCustomer.css (Professional Design)
+   ========================== */
+
+/* Admin Dashboard container and layout */
+.admin-dashboard {
+    min-height: 100vh;
+    background-color: #f8fafc;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Navbar styles */
+.admin-navbar {
+    background: #0f1724; /* near-black navy */
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.admin-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4b2ccf; /* Deep purple */
+    text-decoration: none;
+}
+
+/* Content container */
+.admin-content {
+    padding: 2rem;
+}
+
+/* Form Container */
+.bg-white {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Heading */
+h1 {
+    color: #0f1724;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* Form Inputs */
+.admin-filter-input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    width: 100%;
+    transition: border 0.2s ease;
+    margin-bottom: 1.25rem; /* Adds space between inputs */
+}
+
+/* On focus, highlight with CONNECTCOM color */
+.admin-filter-input:focus {
+    outline: none;
+    border-color: #4b2ccf;
+    box-shadow: 0 0 0 2px rgba(75, 44, 207, 0.2);
+}
+
+/* Success/Error Messages */
+.text-red-500 {
+    color: #c53030;
+}
+
+.bg-red-100 {
+    background-color: #fed7d7;
+}
+
+.text-green-700 {
+    color: #2f855a;
+}
+
+.bg-green-100 {
+    background-color: #c6f6d5;
+}
+
+/* Message containers */
+.bg-red-100, .bg-green-100 {
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+/* Button styles */
+button {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    background-color: #4b2ccf;
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 1rem; /* Adds space above button */
+}
+
+button:disabled {
+    background-color: #e2e8f0;
+}
+
+button:hover {
+    background-color: #3d1c8f;
+}
+
+/* For links like 'Back to Dashboard' */
+.text-blue-600 {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.text-blue-600:hover {
+    text-decoration: underline;
+}
+
+/* Add some spacing between form fields and messages */
+.mb-4, .mb-6 {
+    margin-bottom: 1.5rem; /* Adjusting margin for better spacing */
+}
