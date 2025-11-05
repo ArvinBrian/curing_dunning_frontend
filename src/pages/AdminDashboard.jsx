@@ -143,22 +143,22 @@ const AdminDashboard = () => {
         <div className="admin-dashboard" style={styles.dashboard}>
             <nav className="navbar" style={styles.navbar}>
                 <div className="navbar__brand" style={styles.navbarBrand}>
-                    CONNECTCOM 📞
+                    CONNECTCOM
                 </div>
                 <ul className="navbar__links" style={styles.navbarLinks}>
                     <li>
                         <Link to="/admin/customers/add" style={styles.navbarBtn}>
-                            ➕ Add Customer
+                             Add Customer
                         </Link>
                     </li>
                     <li>
                         <Link to="/admin/events" style={styles.navbarBtn}>
-                            🚨 View All Events
+                             View All Events
                         </Link>
                     </li>
                     <li>
                         <Link to="/admin/rules" style={styles.navbarBtn}>
-                            ⚙️ Manage Rules
+                             Manage Rules
                         </Link>
                     </li>
                 </ul>
@@ -253,7 +253,7 @@ const AdminDashboard = () => {
                             ) : (
                                 <tr>
                                     <td colSpan="6" className="admin-empty">
-                                        No customers found. 😞
+                                        No customers found.
                                     </td>
                                 </tr>
                             )}

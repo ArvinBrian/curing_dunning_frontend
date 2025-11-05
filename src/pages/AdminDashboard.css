@@ -1,6 +1,4 @@
-/* Admin Dashboard Styles - CONNECTCOM */
-/* ----------------------------------- */
-
+/* ---------------- General Styles ---------------- */
 .admin-dashboard {
     min-height: 100vh;
     background-color: #f8fafc;
@@ -15,7 +13,7 @@
     padding: 1rem 2rem;
     background: #0f1724; /* near-black navy */
     color: #fff;
-    box-shadow: 0 2px 8px var(--shadow-strong);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .navbar__brand {
@@ -49,26 +47,17 @@
     transition: background 0.15s ease, color 0.15s ease;
 }
 
+/* Hover effect for the buttons */
 .navbar__btn:hover {
     background: rgba(255, 255, 255, 0.05);
 }
-
-/* Optional: For logout button customization */
-.navbar__btn--logout {
-    color: #fca5a5;
-}
-
-.navbar__btn--logout:hover {
-    background: rgba(255, 255, 255, 0.06);
-}
-
 
 /* ===== Dashboard Header ===== */
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #000000, #090420); /* Deep Purple Gradient */
+  background: linear-gradient(90deg, #2e1a94, #4b2ccf); /* Deep Purple Gradient */
   padding: 1rem 2rem;
   color: #fff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -77,10 +66,7 @@
 .admin-header__title {
   font-size: 1.5rem;
   font-weight: 700;
-    /* background: linear-gradient(90deg, #2e1a94, #4b2ccf); Deep Purple Gradient */
-    /* color: linear-gradient(90deg, #2e1a94, #4b2ccf);; */
-  color: #2e1a94;
-    letter-spacing: 0.05rem;
+  letter-spacing: 0.05rem;
   color: #ffffff; /* Dark Blue Text */
 }
 
@@ -109,8 +95,6 @@
 .admin-header__btn:active {
   transform: translateY(0);
 }
-
-
 
 /* ===== FILTER ===== */
 .admin-filter-container {
