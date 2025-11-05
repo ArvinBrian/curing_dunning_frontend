@@ -1,100 +1,67 @@
-/* ---------------- General Styles ---------------- */
-.admin-dashboard {
+---------------- General Styles ----------------
+/* .admin-dashboard {
     min-height: 100vh;
     background-color: #f8fafc;
     font-family: 'Inter', sans-serif;
+} */
+
+.admin-dashboard {
+  margin-top: 0;
+  padding-top: 0;
+}
+body {
+  margin: 0;
 }
 
-/* ---------------- Navbar ---------------- */
+/* --- NAVBAR --- */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background: #0f1724; /* near-black navy */
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.navbar__brand {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #4b2ccf; /* Deep purple to match CONNECTCOM theme */
-    letter-spacing: 0.5px;
-}
-
-.navbar__links {
-    display: flex;
-    gap: 1.25rem;
-    list-style: none;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-.navbar__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 0.4rem 1rem;
-    border-radius: 0.5rem;
-    transition: background 0.15s ease, color 0.15s ease;
-}
-
-/* Hover effect for the buttons */
-.navbar__btn:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* ===== Dashboard Header ===== */
-.admin-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #2e1a94, #4b2ccf); /* Deep Purple Gradient */
-  padding: 1rem 2rem;
-  color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #0b1220; /* dark navy blue/black */
+  padding: 0 30px;
+  height: 70px;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  border-radius: 0; /* remove any corner rounding */
 }
 
-.admin-header__title {
-  font-size: 1.5rem;
+/* Brand text */
+.navbar__brand {
+  font-size: 1.6rem;
   font-weight: 700;
-  letter-spacing: 0.05rem;
-  color: #ffffff; /* Dark Blue Text */
+  color: #5b2be0; /* deep purple */
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-.admin-header__right {
+/* Navbar links */
+.navbar__links {
+  list-style: none;
   display: flex;
-  gap: 1rem;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
 }
 
-.admin-header__btn {
-  background-color: #4b2ccf; /* Deep Purple */
-  color: #fff;
-  border: none;
-  font-size: 0.875rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+/* Each nav item */
+.navbar__btn {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 0.95rem;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.admin-header__btn:hover {
-  background-color: #351f99;
-  transform: translateY(-2px);
+.navbar__btn:hover {
+  color: #a47cf3; /* lighter purple on hover */
+  transform: translateY(-1px);
 }
 
-.admin-header__btn:active {
-  transform: translateY(0);
-}
 
 /* ===== FILTER ===== */
 .admin-filter-container {
@@ -170,3 +137,75 @@
     color: #6b7280;
     font-weight: 500;
 }
+
+/* --- NAVBAR --- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0b1220; /* dark navy-blue-black */
+  padding: 0 30px;
+  height: 70px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Left brand section */
+.navbar__brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #5b2be0; /* deep purple/indigo tone */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Right-side links */
+.navbar__links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Each link/button item */
+.navbar__btn {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar__btn:hover {
+  color: #a47cf3; /* lighter purple hover */
+  transform: translateY(-1px);
+}
+
+/* Logout button variant */
+.navbar__btn--logout {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar__btn--logout:hover {
+  color: #f87171; /* subtle red hover for logout */
+  transform: translateY(-1px);
+}
+
+

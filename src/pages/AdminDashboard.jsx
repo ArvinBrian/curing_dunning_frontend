@@ -62,7 +62,7 @@ const AdminDashboard = () => {
 
     if (loading && !dashboard) return <div className="admin-loading">Loading Admin Portal...</div>;
 
-    // --- INLINE STYLES DEFINITION ---
+    // --- INLINE STYLES DEFINITION (Non-navbar styles kept intact) ---
     const styles = {
         // Main Layout Styles
         dashboard: {
@@ -71,45 +71,17 @@ const AdminDashboard = () => {
             backgroundColor: '#f4f7f6', // Light background for the whole page
             minHeight: '100vh',
         },
-        navbar: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: '#007bff', // Blue header
-            padding: '10px 20px',
-            borderRadius: '8px',
-            marginBottom: '20px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-        },
-        navbarBrand: {
-            color: 'white',
-            fontSize: '24px',
-            fontWeight: 'bold',
-        },
-        navbarLinks: {
-            listStyle: 'none',
-            display: 'flex',
-            gap: '15px',
-            margin: 0,
-            padding: 0,
-        },
-        navbarBtn: {
-            textDecoration: 'none',
-            color: '#007bff',
-            backgroundColor: 'white',
-            padding: '8px 15px',
-            borderRadius: '5px',
-            fontWeight: 'bold',
-            transition: 'background-color 0.3s',
-        },
+        // Removed original navbar styles: navbar, navbarBrand, navbarLinks, navbarBtn
+
         // Filter Section Styles
         filtersSection: {
-            backgroundColor: 'white',
+            // Updated background and border to be less intrusive with new dark navbar
+            backgroundColor: '#ffffff', // White background
             padding: '20px',
             borderRadius: '8px',
             marginBottom: '20px',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-            borderLeft: '5px solid #007bff',
+            borderLeft: '5px solid #0f1724', // Border to match new navbar primary color
         },
         filterHeader: {
             color: '#333',
@@ -138,33 +110,45 @@ const AdminDashboard = () => {
             border: '1px solid #f5c6cb',
         }
     };
+    
+    // Mock logout for button functionality - replace with actual logic
+    const handleLogout = () => {
+        console.log("Admin Logout Clicked! Implement actual logout logic.");
+        // Example: authService.logout();
+    };
 
     return (
         <div className="admin-dashboard" style={styles.dashboard}>
-            <nav className="navbar" style={styles.navbar}>
-                <div className="navbar__brand" style={styles.navbarBrand}>
+            {/* NAVBAR: All styling now comes from the CSS file via class names.
+                Removed inline styles on <nav>, <div>, and <ul>.
+                <Link> components now use className="navbar__btn" 
+            */}
+            <nav className="navbar"> 
+                <div className="navbar__brand">
                     CONNECTCOM
                 </div>
-                <ul className="navbar__links" style={styles.navbarLinks}>
+                <ul className="navbar__links">
                     <li>
-                        <Link to="/admin/customers/add" style={styles.navbarBtn}>
-                             Add Customer
+                        {/* The 'Link' tag renders as an anchor <a> which will pick up .navbar__btn styles */}
+                        <Link to="/admin/customers/add" className="navbar__btn"> 
+                               Add Customer
                         </Link>
                     </li>
                     <li>
-                        <Link to="/admin/events" style={styles.navbarBtn}>
-                             View All Events
+                        <Link to="/admin/events" className="navbar__btn">
+                               View All Events
                         </Link>
                     </li>
                     <li>
-                        <Link to="/admin/rules" style={styles.navbarBtn}>
-                             Manage Rules
+                        <Link to="/admin/rules" className="navbar__btn">
+                               Manage Rules
                         </Link>
                     </li>
+                    
                 </ul>
             </nav>
 
-            {/* --- Filtering Section Added (Styled Inline) --- */}
+            {/* --- Filtering Section Kept Intact (with slight style adjustment for consistency) --- */}
             <div className="admin-filters" style={styles.filtersSection}>
                 <h3 style={styles.filterHeader}>Customer Filters 🔎</h3>
                 <div className="filter-controls" style={styles.filterControls}>
